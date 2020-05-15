@@ -1,0 +1,22 @@
+{
+  "name": "futonland-search",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dimpospelov/futonland-search.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dimpospelov/futonland-search/issues"
+  },
+  "dependencies": {
+    "constructorio": "^2.6.1"
+  }
+}
