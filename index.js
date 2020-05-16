@@ -1,11 +1,46 @@
 var fs = require ('fs'),
-	jsftp = require("jsftp"),
+	Ftp = require('ftp'),
 	ConstructorIO = require('constructorio');
 
+
+var ftp_user = "constructorio";
+var ftp_pass = "XFSrd0UFZSzG";
+
 var constructorio = new ConstructorIO({
-  apiToken: "jO0lkOIKXAkWQniCb0Bz", 
-  apiKey: "anbtAGy3ebXPRjpKaP8b"
+	apiToken: "jO0lkOIKXAkWQniCb0Bz", 
+	apiKey: "anbtAGy3ebXPRjpKaP8b"
 });
+
+
+var ftp = new Ftp();
+ftp.on('ready', function() {
+	// ftp.list((err, list) => {
+	// 	if (err) throw err;
+	// 	console.dir(list);
+	// 	// ftp.end();
+	// });
+
+    ftp.get('public_html/constructorio_feed2.txt', (err, stream) => {
+      if (err) throw err;
+      stream.once('close', function() { ftp.end(); });
+      stream.pipe(fs.createWriteStream('files/constructorio_feed.txt'));
+      console.log('file copied');
+    });
+
+
+
+
+
+});
+
+ftp.connect({
+	host: "feeds.futonland.com",
+	port: 21,
+	user: ftp_user,
+	password: ftp_pass
+});
+
+
 
 // constructorio.verify(function(error, response) {
 //   if (error) {
@@ -15,44 +50,27 @@ var constructorio = new ConstructorIO({
 //   }
 // });
 
-var ftp_user = "constructorio";
-var ftp_pass = "XFSrd0UFZSzG";
 
-const Ftp = new jsftp({
-  host: "feeds.futonland.com",
-  port: 21,
-  user: ftp_user,
-  pass: ftp_pass
-});
 
-Ftp.auth(ftp_user, ftp_pass, (err, res) => {
-	if (err) return console.error(err.message);
-});
+// const Ftp = new jsftp({
+//   host: "feeds.futonland.com",
+//   port: 21,
+//   user: ftp_user,
+//   pass: ftp_pass
+// });
 
-Ftp.ls("public_html", (err, res) => {
-  res.forEach(file => console.log(file.name));
-});
+// Ftp.auth(ftp_user, ftp_pass, (err, res) => {
+// 	if (err) return console.error(err.message);
+// });
 
-var str = "";
-Ftp.get("public_html/constructorio_feed2.txt", (err, socket) => {
-  if (err) {
-    return;
-  }
- 
-  socket.on("data", d => {
-    str += d.toString();
-  });
- 
-  socket.on("close", err => {
-    if (err) {
-      console.error("There was an error retrieving the file.");
-    }
+// Ftp.ls("public_html", (err, res) => {
+//   res.forEach(file => console.log(file.name));
+// });
 
-  console.log("data"+str);
-  });
- 
-  socket.resume();
-});
+// Ftp.get("public_html/constructorio_feed2.txt", "files/constructorio_feed.txt", err => {
+//   if (err) return console.error(err.message);
+//   console.log("File copied successfully!");
+// });
 
 // Ftp.raw("quit", (err, data) => {
 //   if (err) {
