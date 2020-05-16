@@ -20,24 +20,24 @@ ftp.on('ready', function() {
       stream.once('close', function() { 
 
 
-	// fs.readdir('app', function (err, files) {
-	//     //handling error
-	//     if (err) {
-	//         return console.log('Unable to scan directory: ' + err);
-	//     } 
-	//     //listing all files using forEach
-	//     files.forEach(function (file) {
-	//         // Do whatever you want to do with the file
-	//         console.log(file); 
+	fs.readdir('app', function (err, files) {
+	    //handling error
+	    if (err) {
+	        return console.log('Unable to scan directory: ' + err);
+	    } 
+	    //listing all files using forEach
+	    files.forEach(function (file) {
+	        // Do whatever you want to do with the file
+	        console.log(file); 
 
-	// 		var stats = fs.statSync(file)
-	// 		var fileSizeInBytes = stats["size"]
-	// 		//Convert the file size to megabytes (optional)
-	// 		var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
-	// 		console.log('file size' + fileSizeInMegabytes);
+			var stats = fs.statSync(file)
+			var fileSizeInBytes = stats["size"]
+			//Convert the file size to megabytes (optional)
+			var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
+			console.log('file size' + fileSizeInMegabytes);
 
-	//     });
-	// });
+	    });
+	});
 
 		ftp.end();
 
