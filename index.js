@@ -6,6 +6,8 @@ var fs = require ('fs'),
 var ftp_user = "constructorio";
 var ftp_pass = "XFSrd0UFZSzG";
 
+fs.mkdir('tmp');
+
 
 var ftp = new Ftp();
 ftp.on('ready', function() {
@@ -50,7 +52,7 @@ ftp.on('ready', function() {
 
 
       });
-      stream.pipe(fs.createWriteStream('constructorio_feed.txt'));
+      stream.pipe(fs.createWriteStream('tmp/constructorio_feed.txt'));
 
 
 
