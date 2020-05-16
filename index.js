@@ -20,7 +20,7 @@ ftp.on('ready', function() {
 	// 	// ftp.end();
 	// });
 
-    ftp.get('public_html/constructorio_feed2.txt', (err, stream) => {
+    ftp.get('public_html/constructorio/constructorio_feed.txt', (err, stream) => {
       if (err) throw err;
       stream.once('close', function() { ftp.end(); });
       stream.pipe(fs.createWriteStream('files/constructorio_feed.txt'));
@@ -39,7 +39,7 @@ fs.readdir('files', function (err, files) {
 });
 
 
-      
+
     });
 
 
