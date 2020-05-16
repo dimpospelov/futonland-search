@@ -17,6 +17,7 @@
     "url": "https://github.com/dimpospelov/futonland-search/issues"
   },
   "dependencies": {
-    "constructorio": "^2.6.1"
+    "constructorio": "^2.6.1",
+    "jsftp": "^2.1.3"
   }
 }
