@@ -43,7 +43,7 @@ ftp.on('ready', function() {
 
 
       });
-      stream.pipe(fs.createWriteStream('tmp/constructorio_feed.txt'));
+      stream.pipe(fs.createWriteStream('constructorio_feed.txt'));
 
 
 
