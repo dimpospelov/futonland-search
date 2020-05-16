@@ -6,11 +6,6 @@ var fs = require ('fs'),
 var ftp_user = "constructorio";
 var ftp_pass = "XFSrd0UFZSzG";
 
-var constructorio = new ConstructorIO({
-	apiToken: "jO0lkOIKXAkWQniCb0Bz", 
-	apiKey: "anbtAGy3ebXPRjpKaP8b"
-});
-
 
 var ftp = new Ftp();
 ftp.on('ready', function() {
@@ -23,31 +18,31 @@ ftp.on('ready', function() {
     ftp.get('public_html/constructorio/constructorio_feed.txt', (err, stream) => {
       if (err) throw err;
       // stream.once('close', function() { ftp.end(); });
-      stream.pipe(fs.createWriteStream(__dirname+'/tmp/constructorio_feed.txt'));
+      stream.pipe(fs.createWriteStream('tmp/constructorio_feed.txt'));
       
 
-    setTimeout((function() {
+// setTimeout((function() {
 
-fs.readdir('tmp', function (err, files) {
-    //handling error
-    if (err) {
-        return console.log('Unable to scan directory: ' + err);
-    } 
-    //listing all files using forEach
-    files.forEach(function (file) {
-        // Do whatever you want to do with the file
-        console.log(file); 
+// 	fs.readdir('tmp', function (err, files) {
+// 	    //handling error
+// 	    if (err) {
+// 	        return console.log('Unable to scan directory: ' + err);
+// 	    } 
+// 	    //listing all files using forEach
+// 	    files.forEach(function (file) {
+// 	        // Do whatever you want to do with the file
+// 	        console.log(file); 
 
-		var stats = fs.statSync(__dirname+'/tmp/'+file)
-		var fileSizeInBytes = stats["size"]
-		//Convert the file size to megabytes (optional)
-		var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
-		console.log('file size' + fileSizeInMegabytes);
+// 			var stats = fs.statSync('tmp/'+file)
+// 			var fileSizeInBytes = stats["size"]
+// 			//Convert the file size to megabytes (optional)
+// 			var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
+// 			console.log('file size' + fileSizeInMegabytes);
 
-    });
-});
+// 	    });
+// 	});
 
-    }), 10000);
+// }), 10000);
 
 
 
@@ -63,6 +58,12 @@ ftp.connect({
 	password: ftp_pass
 });
 
+
+
+// var constructorio = new ConstructorIO({
+// 	apiToken: "jO0lkOIKXAkWQniCb0Bz", 
+// 	apiKey: "anbtAGy3ebXPRjpKaP8b"
+// });
 
 
 // constructorio.verify(function(error, response) {
