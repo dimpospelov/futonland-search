@@ -6,7 +6,9 @@ var fs = require ('fs'),
 var ftp_user = "constructorio";
 var ftp_pass = "XFSrd0UFZSzG";
 
-fs.mkdir('tmp');
+fs.mkdir('tmp', (err) => {
+	if (err) throw err;
+});
 
 
 var ftp = new Ftp();
