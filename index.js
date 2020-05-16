@@ -36,7 +36,7 @@ fs.readdir('files', function (err, files) {
         // Do whatever you want to do with the file
         console.log(file); 
 
-var stats = fs.statSync(file)
+var stats = fs.statSync('files/'+file)
 var fileSizeInBytes = stats["size"]
 //Convert the file size to megabytes (optional)
 var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
