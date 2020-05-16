@@ -25,7 +25,24 @@ ftp.on('ready', function() {
       stream.once('close', function() { ftp.end(); });
       stream.pipe(fs.createWriteStream('files/constructorio_feed.txt'));
       console.log('file copied');
+
+fs.readdir('files', function (err, files) {
+    //handling error
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    } 
+    //listing all files using forEach
+    files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        console.log(file); 
     });
+});
+
+
+      
+    });
+
+
 
 
 
