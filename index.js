@@ -1,5 +1,6 @@
-var jsftp = require("jsftp");
-var ConstructorIO = require('constructorio');
+var fs = require ('fs'),
+	jsftp = require("jsftp"),
+	ConstructorIO = require('constructorio');
 
 var constructorio = new ConstructorIO({
   apiToken: "jO0lkOIKXAkWQniCb0Bz", 
@@ -32,7 +33,7 @@ Ftp.ls(".", (err, res) => {
   res.forEach(file => console.log(file.name));
 });
 
-Ftp.get("public_html/constructorio_feed2.txt", "constructorio_feed.txt", err => {
+Ftp.get("public_html/constructorio_feed2.txt", "files/constructorio_feed.txt", err => {
   if (err) return console.error(err.message);
   console.log("File copied successfully!");
 });
