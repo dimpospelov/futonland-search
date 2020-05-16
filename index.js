@@ -12,12 +12,6 @@ var constructorio = new ConstructorIO({
 });
 
 
-fs.writeFile('files/constructorio_feed.txt', '', function (err) {
-  if (err) throw err;
-  console.log('Saved!');
-});
-
-
 var ftp = new Ftp();
 ftp.on('ready', function() {
 	// ftp.list((err, list) => {
@@ -32,17 +26,17 @@ ftp.on('ready', function() {
       stream.pipe(fs.createWriteStream('files/constructorio_feed.txt'));
       console.log('file copied');
 
-// fs.readdir('files', function (err, files) {
-//     //handling error
-//     if (err) {
-//         return console.log('Unable to scan directory: ' + err);
-//     } 
-//     //listing all files using forEach
-//     files.forEach(function (file) {
-//         // Do whatever you want to do with the file
-//         console.log(file); 
-//     });
-// });
+fs.readdir('files', function (err, files) {
+    //handling error
+    if (err) {
+        return console.log('Unable to scan directory: ' + err);
+    } 
+    //listing all files using forEach
+    files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        console.log(file); 
+    });
+});
 
 
 
