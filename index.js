@@ -24,7 +24,7 @@ ftp.on('ready', function() {
       stream.once('close', function() { 
 
 
-	var files = fs.readdirSync(__dirname);
+	var files = fs.readdirSync(__dirname + '/tmp');
 
 	for (var i=0; i<files.length; i++) {
 		console.log(files[i]);
