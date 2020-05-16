@@ -20,7 +20,7 @@ ftp.on('ready', function() {
       stream.once('close', function() { 
 
 
-	fs.readdir('app/tmp', function (err, files) {
+	fs.readdir('/app/tmp', function (err, files) {
 	    //handling error
 	    if (err) {
 	        return console.log('Unable to scan directory: ' + err);
@@ -30,7 +30,7 @@ ftp.on('ready', function() {
 	        // Do whatever you want to do with the file
 	        console.log(file); 
 
-			var stats = fs.statSync('app/tmp/'+file)
+			var stats = fs.statSync('/app/tmp/'+file)
 			var fileSizeInBytes = stats["size"]
 			//Convert the file size to megabytes (optional)
 			var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
@@ -41,7 +41,7 @@ ftp.on('ready', function() {
 
 
       });
-      stream.pipe(fs.createWriteStream('app/tmp/constructorio_feed.txt'));
+      stream.pipe(fs.createWriteStream('/app/tmp/constructorio_feed.txt'));
       
 
 
