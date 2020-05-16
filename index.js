@@ -22,9 +22,11 @@ ftp.on('ready', function() {
 
     ftp.get('public_html/constructorio/constructorio_feed.txt', (err, stream) => {
       if (err) throw err;
-      stream.once('close', function() { ftp.end(); });
+      // stream.once('close', function() { ftp.end(); });
       stream.pipe(fs.createWriteStream('files/constructorio_feed.txt'));
-      console.log('file copied');
+      
+
+    setTimeout((function() {
 
 fs.readdir('files', function (err, files) {
     //handling error
@@ -36,25 +38,22 @@ fs.readdir('files', function (err, files) {
         // Do whatever you want to do with the file
         console.log(file); 
 
-var stats = fs.statSync('files/'+file)
-var fileSizeInBytes = stats["size"]
-//Convert the file size to megabytes (optional)
-var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
-console.log(fileSizeInMegabytes);
+		var stats = fs.statSync('files/'+file)
+		var fileSizeInBytes = stats["size"]
+		//Convert the file size to megabytes (optional)
+		var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
+		console.log('file size' + fileSizeInMegabytes);
 
     });
 });
 
+    }), 10000);
+
+
+
 
 
     });
-
-
-
-
-
-
-
 });
 
 ftp.connect({
