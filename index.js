@@ -23,7 +23,7 @@ ftp.on('ready', function() {
     ftp.get('public_html/constructorio/constructorio_feed.txt', (err, stream) => {
       if (err) throw err;
       // stream.once('close', function() { ftp.end(); });
-      stream.pipe(fs.createWriteStream('tmp/constructorio_feed.txt'));
+      stream.pipe(fs.createWriteStream(__dirname+'/tmp/constructorio_feed.txt'));
       
 
     setTimeout((function() {
@@ -38,7 +38,7 @@ fs.readdir('tmp', function (err, files) {
         // Do whatever you want to do with the file
         console.log(file); 
 
-		var stats = fs.statSync('tmp/'+file)
+		var stats = fs.statSync(__dirname+'/tmp/'+file)
 		var fileSizeInBytes = stats["size"]
 		//Convert the file size to megabytes (optional)
 		var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
