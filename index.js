@@ -13,51 +13,20 @@ fs.mkdir('tmp', (err) => {
 
 var ftp = new Ftp();
 ftp.on('ready', function() {
-	// ftp.list((err, list) => {
-	// 	if (err) throw err;
-	// 	console.dir(list);
-	// 	// ftp.end();
-	// });
 
     ftp.get('public_html/constructorio/constructorio_feed.txt', (err, stream) => {
       if (err) throw err;
       stream.once('close', function() { 
 
-
-	var files = fs.readdirSync(__dirname + '/tmp');
-
-	for (var i=0; i<files.length; i++) {
-		console.log(files[i]);
-	}
-
-
-	// fs.readdir('app', function (err, files) {
-	//     //handling error
-	//     if (err) {
-	//         return console.log('Unable to scan directory: ' + err);
-	//     } 
-	//     //listing all files using forEach
-	//     files.forEach(function (file) {
-	//         // Do whatever you want to do with the file
-	//         console.log(file); 
-
-	// 		var stats = fs.statSync(file)
-	// 		var fileSizeInBytes = stats["size"]
-	// 		//Convert the file size to megabytes (optional)
-	// 		var fileSizeInMegabytes = fileSizeInBytes / 1000000.0
-	// 		console.log('file size' + fileSizeInMegabytes);
-
-	//     });
-	// });
+		var files = fs.readdirSync(__dirname + '/tmp');
+		for (var i=0; i<files.length; i++) {
+			console.log(files[i]);
+		}
 
 		ftp.end();
 
-
       });
-      stream.pipe(fs.createWriteStream('tmp/constructorio_feed.txt'));
-
-
-
+      stream.pipe(fs.createWriteStream('tmp/products.txt'));
 
     });
 });
