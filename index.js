@@ -20,7 +20,7 @@ ftp.on('ready', function() {
       stream.once('close', function() { 
 
 
-	fs.readdir('app/', function (err, files) {
+	fs.readdir('app', function (err, files) {
 	    //handling error
 	    if (err) {
 	        return console.log('Unable to scan directory: ' + err);
