@@ -29,13 +29,29 @@ Ftp.auth(ftp_user, ftp_pass, (err, res) => {
 	if (err) return console.error(err.message);
 });
 
-Ftp.ls(".", (err, res) => {
+Ftp.ls("public_html", (err, res) => {
   res.forEach(file => console.log(file.name));
 });
 
-Ftp.get("public_html/constructorio_feed2.txt", "files/constructorio_feed.txt", err => {
-  if (err) return console.error(err.message);
-  console.log("File copied successfully!");
+var str = "";
+Ftp.get("public_html/constructorio_feed2.txt", (err, socket) => {
+  if (err) {
+    return;
+  }
+ 
+  socket.on("data", d => {
+    str += d.toString();
+  });
+ 
+  socket.on("close", err => {
+    if (err) {
+      console.error("There was an error retrieving the file.");
+    }
+
+  console.log("data"+str);
+  });
+ 
+  socket.resume();
 });
 
 // Ftp.raw("quit", (err, data) => {
