@@ -10,11 +10,11 @@ module.exports = function() {
 
 
 	constructorio.verify(function(error, response) {
-	  if (error) {
-	    console.log("Error: ", error);
-	  } else {
-	    console.log("Response: ", response);
-	  }
+		if (error) {
+			console.log("Error: ", error);
+		} else {
+			console.log("Response: ", response);
+		}
 	});
 
 }
