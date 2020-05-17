@@ -19,55 +19,37 @@ d = d.getFullYear()
 var ftp = new Ftp();
 ftp.on('ready', function() {
 
-	fs.mkdir('tmp', (err) => {
-		if (err) throw err;
-	});
-
+	if (!fs.existsSync('tmp')){	
+		fs.mkdir('tmp', (err) => {
+			if (err) throw err;
+		});
+	}
 
 	ftp.list('feeds/search', (err, list) => {
 		if (err) throw err;
 
+		var filesProcessed = 0;
 		list.forEach(function(file) {
 			ftp.get('feeds/search/'+file.name, (err, stream) => {
 				if (err) throw err;
 				if (file.name=='products.txt') file.name = 'products-'+d+'.txt';
-				stream.once('close', function() { 
-
-	var files = fs.readdirSync(__dirname + '/tmp');
-	for (var i=0; i<files.length; i++) {
-		console.log(files[i]);
-	}
-
-
-					ftp.end(); });
 				stream.pipe(fs.createWriteStream('tmp/'+file.name));
+
+				filesProcessed++;
+				if (filesProcessed==list.length) {
+					// callback
+					console.log('foo');
+
+					var files = fs.readdirSync(__dirname + '/tmp');
+					for (var i=0; i<files.length; i++) {
+						console.log(files[i]);
+					}
+				}
+
 			});
 		})
 
 	});
-
-
-
-
-
-
-
-	// ftp.get('feeds/search/products.txt', (err, stream) => {
-	// 	if (err) throw err;
-	// 	stream.once('close', function() { 
-
-	// 		var files = fs.readdirSync(__dirname + '/tmp');
-	// 		for (var i=0; i<files.length; i++) {
-	// 			console.log(files[i]);
-	// 		}
-
-	// 		constructor();
-	// 		ftp.end();
-
-	// 	});
-	// 	stream.pipe(fs.createWriteStream('tmp/products-'+d+'.txt'));
-
-	// });
 
 });
 
@@ -78,3 +60,4 @@ ftp.connect({
 	user: "constructorio",
 	password: "XFSrd0UFZSzG"
 });
+
