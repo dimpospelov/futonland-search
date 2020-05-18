@@ -1,14 +1,15 @@
 var fs = require('fs'),
 	path = require('path'),
 	csv = require('fast-csv'),
-	ConstructorIO = require('constructorio');
+	ConstructorIO = require('constructorio'),
+	updateKeywords = require('./keywords.js');
 
 
 module.exports = function() {
 
 	var constructorio = new ConstructorIO({
 		apiToken: "jO0lkOIKXAkWQniCb0Bz", 
-		autocompleteKey: "anbtAGy3ebXPRjpKaP8b"
+		apiKey: "anbtAGy3ebXPRjpKaP8b"
 	});
 
 	constructorio.verify(function(error, response) {
@@ -97,10 +98,10 @@ module.exports = function() {
 					}
 				}
 
-				constructorio.remove_batch(
+				constructorio.removeItemBatch(
 				{
 					items: removeItems,
-					autocomplete_section: "Products"
+					section: "Products"
 				},
 				function(err, res) {
 					if (err) {
@@ -112,7 +113,9 @@ module.exports = function() {
 
 					if (previousImport.length > limit) {
 						previousImport.splice(0,limit);
-						removeLoop();
+						setTimeout((function() {
+							removeLoop();
+						}), 10000);
 					}
 					else {
 						addUpdateLoop();
@@ -147,10 +150,10 @@ module.exports = function() {
 					}
 				}
 
-				constructorio.add_or_update_batch(
+				constructorio.addOrUpdateItemBatch(
 				{
 					items: addUpdateItems,
-					autocomplete_section: "Products"
+					section: "Products"
 				},
 				function(err, res) {
 					if (err) {
@@ -162,7 +165,9 @@ module.exports = function() {
 
 					if (currentImport.length > limit) {
 						currentImport.splice(0,limit);
-						addUpdateLoop();
+						setTimeout((function() {
+							addUpdateLoop();
+						}), 10000);
 					}
 					else {
 							removeFiles();
@@ -178,21 +183,17 @@ module.exports = function() {
 
 
 	function removeFiles() {
-		fs.unlink(directory+'/'+prefix+'-'+currentDate+'.csv', function(err) {
+		fs.unlink(path.resolve(__dirname, directory, prefix+'-'+currentDate+'.csv'), function(err) {
 			if (err) return console.log(err);
 
 			console.log(prefix+'-'+currentDate+'.csv removed from the files folder');
 
-			fs.unlink(directory+'/'+prefix+'-'+previousDate+'.csv', function(err) {
+			fs.unlink(path.resolve(__dirname, directory, prefix+'-'+previousDate+'.csv'), function(err) {
 				if (err) return console.log(err);
 
 				console.log(prefix+'-'+previousDate+'.csv removed from the files folder');
 			});
 		});
-		// fs.readdir(directory, function(err, files) {
-		// 	if (err) console.log(err);
-		// 	console.log(files);
-		// })
 	}
 
 
@@ -218,7 +219,7 @@ module.exports = function() {
 				newData['Term'] = data['Title'];
 				newData['Description'] = data['Brand/Manufacturer'];
 				newData['Url'] = data['Product URL'].replace("http://", "https://");
-				newData['Image Url'] = data['Image URL'].replace("http://", "https://").replace("/main/", "/mini/");
+				newData['Image Url'] = data['Image URL'].replace("http://", "https://").replace("/main/", "/small/");
 				newData['Keywords'] = [ data['Merchant Product ID'], data['Manufacturer Part #'], data['Brand/Manufacturer'] ];
 				return newData;
 
