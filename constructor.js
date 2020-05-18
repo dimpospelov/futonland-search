@@ -1,24 +1,23 @@
 var fs = require('fs'),
+	path = require('path'),
+	csv = require('fast-csv'),
 	ConstructorIO = require('constructorio');
-
-const path = require('path');
-const csv = require('fast-csv');
 
 
 module.exports = function() {
 
 	var constructorio = new ConstructorIO({
 		apiToken: "jO0lkOIKXAkWQniCb0Bz", 
-		apiKey: "anbtAGy3ebXPRjpKaP8b"
+		autocompleteKey: "anbtAGy3ebXPRjpKaP8b"
 	});
 
-	// constructorio.verify(function(error, response) {
-	// 	if (error) {
-	// 		console.log("Error: ", error);
-	// 	} else {
-	// 		console.log("Response: ", response);
-	// 	}
-	// });
+	constructorio.verify(function(error, response) {
+		if (error) {
+			console.log(error.message);
+		} else {
+			console.log(response.message);
+		}
+	});
 
 
 	var directory = 'tmp';
@@ -32,170 +31,169 @@ module.exports = function() {
 		}
 	}
 
-	var latestDate = Math.max.apply(null, dates);
+	var currentDate = Math.max.apply(null, dates);
 	var previousDate = Math.min.apply(null, dates);
 
-	var previousImport = [];
 	var currentImport = [];
+	var previousImport = [];
 
 	function convertFiles() {
-		convert(prefix+'-'+latestDate+'.csv', function(returnValue) {
+		convert(prefix+'-'+currentDate+'.csv', function(returnValue) {
 			currentImport = returnValue;
 
 			convert(prefix+'-'+previousDate+'.csv', function(returnValue) {
 				previousImport = returnValue;
-				// compareFiles();
+				compareFiles();
 			});
 		});
 	}
 	convertFiles();
 
 
-	// function compareFiles() {
-	// 	//updateKeywords(currentImport); // all products
-	// 	for (var i=0; i<currentImport.length; i++) {
+	function compareFiles() {
+		//updateKeywords(currentImport); // all products
+		for (var i=0; i<currentImport.length; i++) {
 
-	// 		for (var j=0; j<previousImport.length; j++) {
+			for (var j=0; j<previousImport.length; j++) {
 
-	// 			if (currentImport[i]['Id'] == previousImport[j]['Id']) {
+				if (currentImport[i]['Id'] == previousImport[j]['Id']) {
 
-	// 				if (currentImport[i]['Term'] == previousImport[j]['Term'] &&
-	// 					currentImport[i]['Description'] == previousImport[j]['Description'] &&
-	// 					currentImport[i]['Url'] == previousImport[j]['Url'] &&
-	// 					currentImport[i]['Image Url'] == previousImport[j]['Image Url']) {
-	// 					currentImport.splice(i, 1);
-	// 			}
+					if (currentImport[i]['Term'] == previousImport[j]['Term'] &&
+						currentImport[i]['Description'] == previousImport[j]['Description'] &&
+						currentImport[i]['Url'] == previousImport[j]['Url'] &&
+						currentImport[i]['Image Url'] == previousImport[j]['Image Url']) {
+						currentImport.splice(i, 1);
+					}
 
-	// 			previousImport.splice(j, 1);
-	// 			i--;
-	// 			j--;
-	// 			break;
-	// 		}
-	// 	}
-	// }
-	// 	// updateKeywords(currentImport); // new products
-	// 	// uploadFeeds();
-	// }
-
-
-	// function uploadFeeds() {
-
-	// 	console.log('Removing '+previousImport.length+' items');
-	// 	console.log('Adding and Updating '+currentImport.length+' items');
-
-	// 	var limit = 1000;
-
-	// 	removeLoop();
-
-	// 	function removeLoop() {
-
-	// 		if (previousImport.length) {
-
-	// 			var removeItems = [];
-	// 			for (var i=0; i<previousImport.length; i++) {
-	// 				if (i<limit) {
-	// 					removeItems.push({
-	// 						id: previousImport[i]['Id']
-	// 					});
-	// 				}
-	// 			}
-
-	// 			constructorio.remove_batch(
-	// 			{
-	// 				items: removeItems,
-	// 				autocomplete_section: "Products"
-	// 			},
-	// 			function(err, res) {
-	// 				if (err) {
-	// 					console.log(err.message);
-	// 				}
-	// 				else {
-	// 					console.log('Items removed successfully');
-	// 				}
-
-	// 				if (previousImport.length > limit) {
-	// 					previousImport.splice(0,limit);
-	// 					removeLoop();
-	// 				}
-	// 				else {
-	// 					addUpdateLoop();
-	// 				}
-	// 			}
-	// 			);
-
-	// 		}
-	// 		else {
-	// 			addUpdateLoop();
-	// 		}
-
-	// 	}
+					previousImport.splice(j, 1);
+					i--;
+					j--;
+					break;
+				}
+			}
+		}
+		// updateKeywords(currentImport); // new products
+		uploadFeeds();
+	}
 
 
-	// 	function addUpdateLoop() {
+	function uploadFeeds() {
 
-	// 		if (currentImport.length) {
+		console.log('Removing '+previousImport.length+' items');
+		console.log('Adding and updating '+currentImport.length+' items');
 
-	// 			var addUpdateItems = [];
-	// 			for (var i=0; i<currentImport.length; i++) {
-	// 				if (i<limit) {
-	// 					addUpdateItems.push({
-	// 						id: currentImport[i]['Id'], 
-	// 						item_name: currentImport[i]['Term'], 
-	// 						description: currentImport[i]['Description'],
-	// 						url: currentImport[i]['Url'], 
-	// 						image_url: currentImport[i]['Image Url'],
-	// 						keywords: currentImport[i]['Keywords']
-	// 					});
-	// 				}
-	// 			}
+		var limit = 1000;
 
-	// 			constructorio.add_or_update_batch(
-	// 			{
-	// 				items: addUpdateItems,
-	// 				autocomplete_section: "Products"
-	// 			},
-	// 			function(err, res) {
-	// 				if (err) {
-	// 					console.log(err.message);
-	// 				}
-	// 				else {
-	// 					console.log('Items added and updated successfully');
-	// 				}
+		function removeLoop() {
 
-	// 				if (currentImport.length > limit) {
-	// 					currentImport.splice(0,limit);
-	// 					addUpdateLoop();
-	// 				}
-	// 				else {
-	// 						// removeFiles();
-	// 					}
-	// 				}
-	// 				);
-	// 		}
-	// 		else {
-	// 			// removeFiles();
-	// 		}
-	// 	}
-	// }
+			if (previousImport.length) {
+
+				var removeItems = [];
+				for (var i=0; i<previousImport.length; i++) {
+					if (i<limit) {
+						removeItems.push({
+							id: previousImport[i]['Id']
+						});
+					}
+				}
+
+				constructorio.remove_batch(
+				{
+					items: removeItems,
+					autocomplete_section: "Products"
+				},
+				function(err, res) {
+					if (err) {
+						console.log(err.message);
+					}
+					else {
+						console.log(removeItems.length+' items removed successfully');
+					}
+
+					if (previousImport.length > limit) {
+						previousImport.splice(0,limit);
+						removeLoop();
+					}
+					else {
+						addUpdateLoop();
+					}
+				}
+				);
+
+			}
+			else {
+				addUpdateLoop();
+			}
+
+		}
+		removeLoop();
 
 
-	// function removeFiles() {
-	// 	fs.unlink(directory+'/'+prefix+latestDate+'.csv', function(err) {
-	// 		if (err) return console.log(err);
+		function addUpdateLoop() {
 
-	// 		console.log(prefix+latestDate+'.csv removed from the files folder');
+			if (currentImport.length) {
 
-	// 		fs.unlink(directory+'/'+prefix+previousDate+'.csv', function(err) {
-	// 			if (err) return console.log(err);
+				var addUpdateItems = [];
+				for (var i=0; i<currentImport.length; i++) {
+					if (i<limit) {
+						addUpdateItems.push({
+							id: currentImport[i]['Id'], 
+							item_name: currentImport[i]['Term'], 
+							description: currentImport[i]['Description'],
+							url: currentImport[i]['Url'], 
+							image_url: currentImport[i]['Image Url'],
+							keywords: currentImport[i]['Keywords']
+						});
+					}
+				}
 
-	// 			console.log(prefix+previousDate+'.csv removed from the files folder');
-	// 		});
-	// 	});
-	// 	// fs.readdir(directory, function(err, files) {
-	// 	// 	if (err) console.log(err);
-	// 	// 	console.log(files);
-	// 	// })
-	// }
+				constructorio.add_or_update_batch(
+				{
+					items: addUpdateItems,
+					autocomplete_section: "Products"
+				},
+				function(err, res) {
+					if (err) {
+						console.log(err.message);
+					}
+					else {
+						console.log(addUpdateItems.length+' items added and updated successfully');
+					}
+
+					if (currentImport.length > limit) {
+						currentImport.splice(0,limit);
+						addUpdateLoop();
+					}
+					else {
+							removeFiles();
+						}
+					}
+					);
+			}
+			else {
+				removeFiles();
+			}
+		}
+	}
+
+
+	function removeFiles() {
+		fs.unlink(directory+'/'+prefix+'-'+currentDate+'.csv', function(err) {
+			if (err) return console.log(err);
+
+			console.log(prefix+'-'+currentDate+'.csv removed from the files folder');
+
+			fs.unlink(directory+'/'+prefix+'-'+previousDate+'.csv', function(err) {
+				if (err) return console.log(err);
+
+				console.log(prefix+'-'+previousDate+'.csv removed from the files folder');
+			});
+		});
+		// fs.readdir(directory, function(err, files) {
+		// 	if (err) console.log(err);
+		// 	console.log(files);
+		// })
+	}
 
 
 	function convert(file, callback) {
