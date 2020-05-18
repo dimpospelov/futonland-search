@@ -33,7 +33,7 @@ ftp.on('ready', function() {
 			ftp.get('feeds/search/'+file.name, (err, stream) => {
 				if (err) throw err;
 				if (file.name=='products.csv') file.name = 'products-'+d+'.csv';
-				
+
 				stream.pipe(fs.createWriteStream('tmp/'+file.name));
 
 				stream.once('close', function() { 
@@ -42,10 +42,8 @@ ftp.on('ready', function() {
 						return constructor();
 					}					
 				});
-
 			});
 		})
-
 	});
 
 });
