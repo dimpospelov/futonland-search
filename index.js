@@ -32,19 +32,16 @@ ftp.on('ready', function() {
 		list.forEach(function(file) {
 			ftp.get('feeds/search/'+file.name, (err, stream) => {
 				if (err) throw err;
-				if (file.name=='products.txt') file.name = 'products-'+d+'.txt';
+				if (file.name=='products.csv') file.name = 'products-'+d+'.csv';
+				
 				stream.pipe(fs.createWriteStream('tmp/'+file.name));
 
-				filesProcessed++;
-				if (filesProcessed==list.length) {
-					// callback
-					console.log('foo');
-
-					var files = fs.readdirSync(__dirname + '/tmp');
-					for (var i=0; i<files.length; i++) {
-						console.log(files[i]);
-					}
-				}
+				stream.once('close', function() { 
+					filesProcessed++;
+					if (filesProcessed==list.length) {
+						return constructor();
+					}					
+				});
 
 			});
 		})
