@@ -115,7 +115,7 @@ module.exports = function() {
 						previousImport.splice(0,limit);
 						setTimeout((function() {
 							removeLoop();
-						}), 10000);
+						}), 1000);
 					}
 					else {
 						addUpdateLoop();
@@ -167,7 +167,7 @@ module.exports = function() {
 						currentImport.splice(0,limit);
 						setTimeout((function() {
 							addUpdateLoop();
-						}), 10000);
+						}), 1000);
 					}
 					else {
 							removeFiles();
@@ -216,10 +216,10 @@ module.exports = function() {
 
 				newData = {};
 				newData['Id'] = data['Merchant Product ID'];
-				newData['Term'] = data['Title'];
+				newData['Term'] = data['Title'].replace("[", "").replace("]", "");
 				newData['Description'] = data['Brand/Manufacturer'];
 				newData['Url'] = data['Product URL'].replace("http://", "https://");
-				newData['Image Url'] = data['Image URL'].replace("http://", "https://").replace("/main/", "/small/");
+				newData['Image Url'] = data['Image URL'].replace("http://", "https://").replace("/main/", "/thumb/");
 				newData['Keywords'] = [ data['Merchant Product ID'], data['Manufacturer Part #'], data['Brand/Manufacturer'] ];
 				return newData;
 
