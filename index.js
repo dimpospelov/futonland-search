@@ -28,6 +28,11 @@ ftp.on('ready', function() {
 	ftp.list('feeds/search', (err, list) => {
 		if (err) throw err;
 
+		if (list.length==1) {
+			console.log('No products file found. Abort!');
+			ftp.end();
+		}
+
 		var filesProcessed = 0;
 		list.forEach(function(file) {
 			ftp.get('feeds/search/'+file.name, (err, stream) => {
@@ -50,9 +55,11 @@ ftp.on('ready', function() {
 
 	function cleanup() {
 
+		var filesProcessed = 0;
 		ftp.list('feeds/search', (err, list) => {
 			if (err) throw err;
 	
+			var filesProcessed = 0;
 			list.forEach(function(file) {
 				if (file.name=='products.csv') {
 					ftp.rename('feeds/search/'+file.name, 'feeds/search/products-'+d+'.csv', (err) => {
@@ -69,6 +76,13 @@ ftp.on('ready', function() {
 						console.log('Removed: '+file.name);
 					});
 				}
+
+				filesProcessed++;
+				if (filesProcessed==list.length) {
+					console.log('Process complete.');
+					ftp.end();
+				}
+
 			})
 		});
 
