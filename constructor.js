@@ -5,7 +5,7 @@ var fs = require('fs'),
 	updateKeywords = require('./keywords.js');
 
 
-module.exports = function() {
+module.exports = function(callback) {
 
 	var constructorio = new ConstructorIO({
 		apiToken: "jO0lkOIKXAkWQniCb0Bz", 
@@ -192,6 +192,7 @@ module.exports = function() {
 				if (err) return console.log(err);
 
 				console.log(prefix+'-'+previousDate+'.csv removed from the files folder');
+				callback();
 			});
 		});
 	}

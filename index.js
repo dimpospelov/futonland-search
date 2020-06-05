@@ -39,12 +39,40 @@ ftp.on('ready', function() {
 				stream.once('close', function() { 
 					filesProcessed++;
 					if (filesProcessed==list.length) {
-						return constructor();
+						return constructor( () => {
+							cleanup();
+						});
 					}					
 				});
 			});
 		})
 	});
+
+	function cleanup() {
+
+		ftp.list('feeds/search', (err, list) => {
+			if (err) throw err;
+	
+			list.forEach(function(file) {
+				if (file.name=='products.csv') {
+					ftp.rename('feeds/search/'+file.name, 'feeds/search/products-'+d+'.csv', (err) => {
+						if (err) throw err;
+						console.log('Latest push: products-'+d+'.csv');
+					});
+				}
+				else if (file.name=='products-'+d+'.csv') {
+					return;
+				}
+				else {
+					ftp.delete('feeds/search/'+file.name, (err) => {
+						if (err) throw err;
+						console.log('Removed: '+file.name);
+					});
+				}
+			})
+		});
+
+	}
 
 });
 
