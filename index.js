@@ -55,7 +55,6 @@ ftp.on('ready', function() {
 
 	function cleanup() {
 
-		var filesProcessed = 0;
 		ftp.list('feeds/search', (err, list) => {
 			if (err) throw err;
 	
